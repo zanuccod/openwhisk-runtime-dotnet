@@ -17,7 +17,7 @@
 #
 -->
 
-# .NET 6.0 OpenWhisk Runtime Container
+# .NET 8.0 OpenWhisk Runtime Container
 
-## 1.17
+## 1.18
 - Initial release

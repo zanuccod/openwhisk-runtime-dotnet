@@ -153,7 +153,7 @@ wsk action invoke --result helloDotNet --param name World
 ## Local Development
 
 ```bash
-./gradlew core:dotnet3.1:distDocker
+./gradlew core:dotnet6.0:distDocker
 ```
 
 This will produce the image `whisk/action-dotnet-v6.0`
