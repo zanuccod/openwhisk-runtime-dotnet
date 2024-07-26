@@ -26,7 +26,7 @@ on:
 permissions: read-all
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-22.04
     steps:
       # Checkout just this repo and run scanCode before we do anything else
