@@ -16,7 +16,7 @@
 # under the License.
 #
 
-name: Continuous Integration
+name: Build & Test
 
 on:
   push:
