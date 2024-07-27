@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -13,21 +13,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
--->
-<Project Sdk="Microsoft.NET.Sdk">
+ */
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-    </PropertyGroup>
+ext.dockerImageName = 'action-net-v8.0'
 
-    <ItemGroup>
-      <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-  
-    <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json">
-        <Version>13.0.1</Version>
-      </PackageReference>
-    </ItemGroup>
-
-</Project>
+apply from: '../../gradle/docker.gradle'

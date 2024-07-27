@@ -46,7 +46,7 @@ cd $OPENWHISK_HOME
 ./gradlew install
 cd ..
 cd openwhisk-runtime-dotnet
-./gradlew core:dotnet3.1:distDocker
+./gradlew core:net8.0:distDocker
 ./gradlew core:net6.0:distDocker
 ./gradlew :tests:test
 ```

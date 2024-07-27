@@ -25,12 +25,12 @@ import actionContainers.ActionContainer.withContainer
 import java.nio.file.Paths
 
 @RunWith(classOf[JUnitRunner])
-class DotNet3_1ActionContainerTests_2_2 extends BasicActionRunnerTests with WskActorSystem {
-  val functionb64 = ResourceHelpers.readAsBase64(Paths.get(getClass.getResource("/dotnettests2.2.zip").getPath))
+class DotNet8_0ActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
+  val functionb64 = ResourceHelpers.readAsBase64(Paths.get(getClass.getResource("/nettests8.0.zip").getPath))
 
   // Helpers specific to java actions
   override def withActionContainer(env: Map[String, String] = Map.empty)(
-    code: ActionContainer => Unit): (String, String) = withContainer("action-dotnet-v3.1", env)(code)
+    code: ActionContainer => Unit): (String, String) = withContainer("action-net-v8.0", env)(code)
 
   behavior of "dotnet action"
 
@@ -47,12 +47,12 @@ class DotNet3_1ActionContainerTests_2_2 extends BasicActionRunnerTests with WskA
     TestConfig(functionb64, main = "Apache.OpenWhisk.Tests.Dotnet::Apache.OpenWhisk.Tests.Dotnet.Environment::Main")
   }
 
-  override val testEcho = {
-    TestConfig(functionb64, main = "Apache.OpenWhisk.Tests.Dotnet::Apache.OpenWhisk.Tests.Dotnet.AltEcho::Main")
-  }
-
   override val testEnvParameters = {
     TestConfig(functionb64, main = "Apache.OpenWhisk.Tests.Dotnet::Apache.OpenWhisk.Tests.Dotnet.Init::Main")
+  }
+
+  override val testEcho = {
+    TestConfig(functionb64, main = "Apache.OpenWhisk.Tests.Dotnet::Apache.OpenWhisk.Tests.Dotnet.AltEcho::Main")
   }
 
   val testEchoNoWrite = {
@@ -125,7 +125,7 @@ class DotNet3_1ActionContainerTests_2_2 extends BasicActionRunnerTests with WskA
       runRes shouldBe defined
 
       runRes should {
-        be(Some(JsObject("error" -> JsString(".NETCoreApp,Version=v3.1"))))
+        be(Some(JsObject("error" -> JsString(".NETCoreApp,Version=v8.0"))))
       }
     }
 
