@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Apache.OpenWhisk.Runtime.Common
 {
@@ -29,42 +31,54 @@ namespace Apache.OpenWhisk.Runtime.Common
             Console.Error.WriteLine("XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX");
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Aggiungi i servizi necessari
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             PathString initPath = new PathString("/init");
             PathString runPath = new PathString("/run");
             Init init = new Init();
             Run run = null;
-            app.Run(async (httpContext) =>
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("{*url}", async context =>
                 {
-                    if (httpContext.Request.Path.Equals(initPath))
+                    if (context.Request.Path.Equals(initPath))
                     {
-                        run = await init.HandleRequest(httpContext);
+                        run = await init.HandleRequest(context);
 
                         if (run != null)
-                            await httpContext.Response.WriteResponse(200, "OK");
+                        {
+                            await context.Response.WriteResponse(200, "OK");
+                        }
 
                         return;
                     }
 
-                    if (httpContext.Request.Path.Equals(runPath))
+                    if (context.Request.Path.Equals(runPath))
                     {
                         if (!init.Initialized)
                         {
-                            await httpContext.Response.WriteError("Cannot invoke an uninitialized action.");
+                            await context.Response.WriteError("Cannot invoke an uninitialized action.");
                             return;
                         }
 
                         if (run == null)
                         {
-                            await httpContext.Response.WriteError("Cannot invoke an uninitialized action.");
+                            await context.Response.WriteError("Cannot invoke an uninitialized action.");
                             return;
                         }
 
-                        await run.HandleRequest(httpContext);
+                        await run.HandleRequest(context);
                     }
-                }
-            );
+                });
+            });
         }
     }
 }

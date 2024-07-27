@@ -15,34 +15,36 @@
  * limitations under the License.
  */
 
-using System;
 using Apache.OpenWhisk.Runtime.Common;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Apache.OpenWhisk.Runtime.Dotnet.Minimal
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(options =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    options.Limits.MaxRequestBodySize = null;
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.ClearProviders();
-                })
-                .SuppressStatusMessages(true)
-                .UseStartup<Startup>();
-
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Limits.MaxRequestBodySize = null;
+                    });
+                    webBuilder.ConfigureLogging((hostingContext, logging) =>
+                    {
+                        logging.ClearProviders();
+                    });
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.SuppressStatusMessages(true);
+                });
     }
 }
 
